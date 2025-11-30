@@ -1,51 +1,85 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Petals</title>
-<style>
-    body {
-        margin: 0;
-        overflow: hidden;
-        background: transparent;
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Petals</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      background: transparent;
+      overflow:hidden;
+      width:100%;height:100%;
     }
-    .petal {
-        position: absolute;
-        width: 50px;
-        height: 50px;
-        background-image: url('https://i.ibb.co/KcR5SNXt/00as.png');
-        background-size: contain;
-        background-repeat: no-repeat;
-        animation: fall linear infinite;
-        opacity: 0.9;
+
+    .fall-layer{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+    .petal{
+      position:absolute;
+      top:-10%;
+      will-change:transform,opacity;
+      pointer-events:none;
+      user-select:none;
+      transform-origin:center;
+      filter:drop-shadow(0 6px 10px rgba(0,0,0,0.45));
+      opacity:0.95;
     }
-    @keyframes fall {
-        0% {
-            transform: translateY(-10vh) rotate(0deg);
-        }
-        100% {
-            transform: translateY(110vh) rotate(360deg);
-        }
+
+    @keyframes fall{
+      0%{transform:translateY(-10vh) rotate(0deg);opacity:0}
+      10%{opacity:1}
+      100%{transform:translateY(120vh) rotate(540deg);opacity:0.95}
     }
-</style>
+    @keyframes sway{
+      0%{transform:translateX(0)}
+      50%{transform:translateX(24px)}
+      100%{transform:translateX(0)}
+    }
+  </style>
 </head>
 <body>
-<script>
-function createPetal() {
-    const petal = document.createElement("div");
-    petal.classList.add("petal");
+  <div class="fall-layer" id="fallLayer" aria-hidden="true"></div>
 
-    petal.style.left = Math.random() * 100 + "vw";
-    petal.style.animationDuration = 3 + Math.random() * 4 + "s";
-    petal.style.opacity = (0.3 + Math.random() * 0.7).toString();
+  <script>
+    const PETAL_IMG = 'https://i.ibb.co/KcR5SNXt/00as.png';
+    const PETAL_COUNT = 20;
+    const MIN_SIZE = 28;
+    const MAX_SIZE = 120;
 
-    document.body.appendChild(petal);
+    const layer = document.getElementById('fallLayer');
+    const rand = (min,max)=> Math.random()*(max-min)+min;
 
-    setTimeout(() => petal.remove(), 7000);
-}
+    for(let i=0;i<PETAL_COUNT;i++) spawnPetal();
 
-setInterval(createPetal, 200);
-</script>
+    function spawnPetal(){
+      const img = document.createElement('img');
+      img.src = PETAL_IMG;
+      img.className = 'petal';
+
+      const left = rand(-10,110);
+      const size = Math.round(rand(MIN_SIZE,MAX_SIZE));
+      const duration = rand(6,18);
+
+      img.style.width = size + 'px';
+      img.style.animation = `fall ${duration}s linear forwards`;
+
+      const wrapper = document.createElement('div');
+      wrapper.style.position = 'absolute';
+      wrapper.style.left = left + '%';
+      wrapper.style.top = '-12%';
+      wrapper.style.width = size + 'px';
+      wrapper.style.height = size + 'px';
+      wrapper.style.animation = `sway ${rand(4,10)}s ease-in-out infinite`;
+      wrapper.appendChild(img);
+      layer.appendChild(wrapper);
+
+      if(Math.random()>0.6) img.style.transform = 'scaleX(-1)';
+
+      img.addEventListener('animationend', ()=>{
+        wrapper.remove();
+        setTimeout(()=> spawnPetal(), rand(300,2000));
+      });
+    }
+  </script>
 </body>
 </html>
