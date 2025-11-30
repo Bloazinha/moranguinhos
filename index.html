@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petals</title>
+<style>
+    body {
+        margin: 0;
+        overflow: hidden;
+        background: transparent;
+    }
+    .petal {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        background-image: url('https://i.ibb.co/KcR5SNXt/00as.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        animation: fall linear infinite;
+        opacity: 0.9;
+    }
+    @keyframes fall {
+        0% {
+            transform: translateY(-10vh) rotate(0deg);
+        }
+        100% {
+            transform: translateY(110vh) rotate(360deg);
+        }
+    }
+</style>
+</head>
+<body>
+<script>
+function createPetal() {
+    const petal = document.createElement("div");
+    petal.classList.add("petal");
+
+    petal.style.left = Math.random() * 100 + "vw";
+    petal.style.animationDuration = 3 + Math.random() * 4 + "s";
+    petal.style.opacity = (0.3 + Math.random() * 0.7).toString();
+
+    document.body.appendChild(petal);
+
+    setTimeout(() => petal.remove(), 7000);
+}
+
+setInterval(createPetal, 200);
+</script>
+</body>
+</html>
