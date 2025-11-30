@@ -42,9 +42,9 @@
 
   <script>
     const PETAL_IMG = 'https://i.ibb.co/KcR5SNXt/00as.png';
-    const PETAL_COUNT = 20;
-    const MIN_SIZE = 28;
-    const MAX_SIZE = 120;
+    const PETAL_COUNT = 10;
+    const MIN_SIZE = 20;
+    const MAX_SIZE = 100;
 
     const layer = document.getElementById('fallLayer');
     const rand = (min,max)=> Math.random()*(max-min)+min;
@@ -58,7 +58,7 @@
 
       const left = rand(-10,110);
       const size = Math.round(rand(MIN_SIZE,MAX_SIZE));
-      const duration = rand(6,18);
+      const duration = rand(10,28);
 
       img.style.width = size + 'px';
       img.style.animation = `fall ${duration}s linear forwards`;
